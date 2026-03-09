@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yasser Andriamiarisoa | Backend Developer</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #0066ff;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .lang-fr { display: none; }
+        [data-lang="fr"] .lang-en { display: none; }
+        [data-lang="fr"] .lang-fr { display: block; }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle, .lang-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 60px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .hero-content .tagline {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .projects-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .project-card h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tech {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .experience-item {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .experience-title h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-company {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .experience-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .experience-description {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover {
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .experience-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">YA</div>
+        <ul class="nav-links">
+            <li><a href="#about" class="lang-en">About</a><a href="#about" class="lang-fr">À propos</a></li>
+            <li><a href="#skills" class="lang-en">Skills</a><a href="#skills" class="lang-fr">Compétences</a></li>
+            <li><a href="#projects" class="lang-en">Projects</a><a href="#projects" class="lang-fr">Projets</a></li>
+            <li><a href="#experience" class="lang-en">Experience</a><a href="#experience" class="lang-fr">Expérience</a></li>
+            <li><a href="#certifications" class="lang-en">Certifications</a><a href="#certifications" class="lang-fr">Certifications</a></li>
+            <li><a href="#contact" class="lang-en">Contact</a><a href="#contact" class="lang-fr">Contact</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+            <button class="lang-toggle" onclick="toggleLang()"><span class="lang-en">🇫🇷 FR</span><span class="lang-fr">🇬🇧 EN</span></button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <img src="img.png" alt="Yasser Andriamiarisoa" style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; margin-bottom: 2rem; border: 4px solid var(--accent); box-shadow: 0 4px 20px rgba(0, 102, 255, 0.2);">
+            <h1>Yasser Andriamiarisoa</h1>
+            <p class="tagline lang-en">Backend Developer passionate about building scalable systems.<br>Currently studying at 42 Antananarivo while gaining real-world experience.</p>
+            <p class="tagline lang-fr">Développeur Backend passionné par la création de systèmes évolutifs.<br>Actuellement étudiant à 42 Antananarivo tout en acquérant de l'expérience professionnelle.</p>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn btn-primary lang-en">Get in Touch</a>
+                <a href="#contact" class="btn btn-primary lang-fr">Me Contacter</a>
+                <a href="cv.pdf" class="btn btn-secondary" download><span class="lang-en">Download CV</span><span class="lang-fr">Télécharger CV</span></a>
+                <a href="https://github.com/Andriamiarisoa" class="btn btn-secondary" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yasser-andriamiarisoa-a7a475238" class="btn btn-secondary" target="_blank">LinkedIn</a>
+                <a href="https://www.credly.com/users/yasser-andriamiarisoa/badges" class="btn btn-secondary" target="_blank"><span class="lang-en">Certifications</span><span class="lang-fr">Certifications</span></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2 class="lang-en">About Me</h2>
+        <h2 class="lang-fr">À Propos</h2>
+        <div class="about-content">
+            <div class="lang-en">
+                <p>I'm a backend developer with a strong foundation in Java/Spring Boot and Python, currently pursuing advanced studies at 42 Antananarivo. My journey in software development combines practical professional experience with rigorous technical training.</p>
+                
+                <p>After earning my Bachelor's degree in Computer Science from <a href="https://www.ituniversity-mg.com/page/check.php?id=2GamgxRoX3D" target="_blank" style="color: var(--accent);">IT University</a>, I gained hands-on experience as a Junior Software Engineer at eTech Consulting, where I developed backend systems for VTC fleet management and smart agriculture platforms. This experience taught me the importance of scalable architecture, clean code, and effective collaboration.</p>
+                
+                <p>At 42 Antananarivo, I'm deepening my knowledge through project-based learning, tackling challenges in C/C++ system programming, algorithms, and computer science fundamentals. I'm passionate about continuous learning and building solutions that make a real impact.</p>
+            </div>
+            <div class="lang-fr">
+                <p>Je suis un développeur backend avec de solides bases en Java/Spring Boot et Python, actuellement en formation avancée à 42 Antananarivo. Mon parcours en développement logiciel combine expérience professionnelle pratique et formation technique rigoureuse.</p>
+                
+                <p>Après avoir obtenu ma Licence en Informatique à <a href="https://www.ituniversity-mg.com/page/check.php?id=2GamgxRoX3D" target="_blank" style="color: var(--accent);">IT University</a>, j'ai acquis une expérience concrète en tant qu'Ingénieur Développeur Junior chez eTech Consulting, où j'ai développé des systèmes backend pour la gestion de flottes VTC et des plateformes d'agriculture intelligente. Cette expérience m'a appris l'importance d'une architecture évolutive, d'un code propre et d'une collaboration efficace.</p>
+                
+                <p>À 42 Antananarivo, j'approfondis mes connaissances par l'apprentissage par projets, en relevant des défis en programmation système C/C++, en algorithmique et en fondamentaux de l'informatique. Je suis passionné par l'apprentissage continu et la création de solutions qui ont un réel impact.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="lang-en">Technical Skills</h2>
+        <h2 class="lang-fr">Compétences Techniques</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="lang-en">Languages</h3>
+                <h3 class="lang-fr">Langages</h3>
+                <ul>
+                    <li>Java</li>
+                    <li>Python</li>
+                    <li>C / C++</li>
+                    <li>SQL</li>
+                    <li>JavaScript</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3 class="lang-en">Backend & APIs</h3>
+                <h3 class="lang-fr">Backend & APIs</h3>
+                <ul>
+                    <li>Spring Boot</li>
+                    <li>FastAPI</li>
+                    <li>RESTful APIs</li>
+                    <li>Microservices</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3 class="lang-en">Databases</h3>
+                <h3 class="lang-fr">Bases de données</h3>
+                <ul>
+                    <li>MySQL / PostgreSQL</li>
+                    <li>Redis</li>
+                    <li class="lang-en">Database Design</li>
+                    <li class="lang-fr">Conception BDD</li>
+                    <li class="lang-en">Query Optimization</li>
+                    <li class="lang-fr">Optimisation requêtes</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3 class="lang-en">DevOps & Tools</h3>
+                <h3 class="lang-fr">DevOps & Outils</h3>
+                <ul>
+                    <li>Docker</li>
+                    <li>Git / GitLab</li>
+                    <li>Linux</li>
+                    <li>Google Cloud Platform</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="lang-en">Projects</h2>
+        <h2 class="lang-fr">Projets</h2>
+        
+        <div class="projects-filter">
+            <button class="filter-btn active" onclick="filterProjects('all')"><span class="lang-en">All</span><span class="lang-fr">Tous</span></button>
+            <button class="filter-btn" onclick="filterProjects('professional')"><span class="lang-en">Professional</span><span class="lang-fr">Professionnels</span></button>
+            <button class="filter-btn" onclick="filterProjects('42')"><span class="lang-en">42 Projects</span><span class="lang-fr">Projets 42</span></button>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+            <div class="project-card" data-category="professional">
+                <h3 class="lang-en">VTC Fleet Management System</h3>
+                <h3 class="lang-fr">Système de Gestion de Flotte VTC</h3>
+                <p class="project-tech">Java, Spring Boot, MySQL, Docker, REST APIs</p>
+                <p class="project-description lang-en">Backend infrastructure for ride-hailing platform with separate APIs for clients, drivers, and administrators. Integrated Google Maps API and Cloud Fleet Routing for optimization.</p>
+                <p class="project-description lang-fr">Infrastructure backend pour plateforme VTC avec APIs séparées pour clients, chauffeurs et administrateurs. Intégration Google Maps API et Cloud Fleet Routing pour optimisation.</p>
+            </div>
+
+            <div class="project-card" data-category="professional">
+                <h3 class="lang-en">Smart Agriculture Platform</h3>
+                <h3 class="lang-fr">Plateforme Agriculture Intelligente</h3>
+                <p class="project-tech">Python, FastAPI, Google Earth Engine</p>
+                <p class="project-description lang-en">Backend services for agricultural data analysis using remote sensing and geospatial data processing.</p>
+                <p class="project-description lang-fr">Services backend pour analyse de données agricoles utilisant télédétection et traitement de données géospatiales.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>ft_irc</h3>
+                <p class="project-tech">C++, <span class="lang-en">Network Programming, Multi-threading</span><span class="lang-fr">Programmation réseau, Multi-threading</span></p>
+                <p class="project-description lang-en">IRC server handling multiple client connections simultaneously. Manages channels, private messages, and user authentication following RFC specifications.</p>
+                <p class="project-description lang-fr">Serveur IRC gérant plusieurs connexions clients simultanément. Gestion des canaux, messages privés et authentification utilisateur selon spécifications RFC.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>Inception</h3>
+                <p class="project-tech">Docker, Docker Compose, <span class="lang-en">System Administration</span><span class="lang-fr">Administration système</span></p>
+                <p class="project-description lang-en">Infrastructure setup using Docker containers. Deployed WordPress, MariaDB, and Nginx services with custom configurations.</p>
+                <p class="project-description lang-fr">Configuration d'infrastructure utilisant conteneurs Docker. Déploiement de services WordPress, MariaDB et Nginx avec configurations personnalisées.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3 class="lang-en">CPP Modules (00-09)</h3>
+                <h3 class="lang-fr">Modules CPP (00-09)</h3>
+                <p class="project-tech">C++98/11, OOP, Templates, STL</p>
+                <p class="project-description lang-en">Progressive mastery of C++ through 10 modules covering OOP principles, memory management, operator overloading, inheritance, polymorphism, templates, and STL containers.</p>
+                <p class="project-description lang-fr">Maîtrise progressive du C++ à travers 10 modules couvrant principes POO, gestion mémoire, surcharge d'opérateurs, héritage, polymorphisme, templates et conteneurs STL.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>Cub3D</h3>
+                <p class="project-tech">C, Raycasting, <span class="lang-en">Graphics</span><span class="lang-fr">Graphisme</span></p>
+                <p class="project-description lang-en">3D game engine inspired by Wolfenstein 3D using raycasting. Implements textured walls, sprite rendering, and collision detection.</p>
+                <p class="project-description lang-fr">Moteur de jeu 3D inspiré de Wolfenstein 3D utilisant raycasting. Implémentation de murs texturés, rendu de sprites et détection de collisions.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>Philosophers</h3>
+                <p class="project-tech">C, Multi-threading, Mutexes</p>
+                <p class="project-description lang-en">Solution to the dining philosophers problem. Manages concurrent processes, prevents deadlocks, and ensures thread safety.</p>
+                <p class="project-description lang-fr">Solution au problème des philosophes. Gestion de processus concurrents, prévention des blocages et sécurité des threads.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>minishell</h3>
+                <p class="project-tech">C, <span class="lang-en">Process Management, Parsing</span><span class="lang-fr">Gestion processus, Parsing</span></p>
+                <p class="project-description lang-en">Unix shell implementation with pipes, redirections, environment variables, and built-in commands. Handles complex command execution.</p>
+                <p class="project-description lang-fr">Implémentation d'un shell Unix avec pipes, redirections, variables d'environnement et commandes intégrées. Gestion d'exécution de commandes complexes.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>fract-ol</h3>
+                <p class="project-tech">C, <span class="lang-en">Graphics, Mathematical Computing</span><span class="lang-fr">Graphisme, Calcul mathématique</span></p>
+                <p class="project-description lang-en">Fractal visualization program rendering Mandelbrot and Julia sets with zoom and color customization.</p>
+                <p class="project-description lang-fr">Programme de visualisation de fractales rendant ensembles de Mandelbrot et Julia avec zoom et personnalisation des couleurs.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>minitalk</h3>
+                <p class="project-tech">C, Signals, <span class="lang-en">Inter-Process Communication</span><span class="lang-fr">Communication inter-processus</span></p>
+                <p class="project-description lang-en">Client-server communication using Unix signals (SIGUSR1/SIGUSR2). Implements binary data transmission.</p>
+                <p class="project-description lang-fr">Communication client-serveur utilisant signaux Unix (SIGUSR1/SIGUSR2). Implémentation de transmission de données binaires.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>push_swap</h3>
+                <p class="project-tech">C, <span class="lang-en">Algorithms, Optimization</span><span class="lang-fr">Algorithmes, Optimisation</span></p>
+                <p class="project-description lang-en">Sorting algorithm using two stacks with limited operations. Optimizes number of moves for efficient sorting.</p>
+                <p class="project-description lang-fr">Algorithme de tri utilisant deux piles avec opérations limitées. Optimisation du nombre de mouvements pour tri efficace.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>Born2beroot</h3>
+                <p class="project-tech">Linux, <span class="lang-en">System Administration, Security</span><span class="lang-fr">Administration système, Sécurité</span></p>
+                <p class="project-description lang-en">Virtual machine setup with strict security policies. Configured SSH, firewall, password policies, and monitoring scripts.</p>
+                <p class="project-description lang-fr">Configuration de machine virtuelle avec politiques de sécurité strictes. Configuration SSH, firewall, politiques de mots de passe et scripts de monitoring.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>get_next_line</h3>
+                <p class="project-tech">C, <span class="lang-en">File I/O, Memory Management</span><span class="lang-fr">Entrées/Sorties fichier, Gestion mémoire</span></p>
+                <p class="project-description lang-en">Function reading line by line from file descriptor. Handles buffer management and multiple file descriptors.</p>
+                <p class="project-description lang-fr">Fonction de lecture ligne par ligne depuis descripteur de fichier. Gestion de buffer et descripteurs multiples.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>ft_printf</h3>
+                <p class="project-tech">C, <span class="lang-en">Variadic Functions</span><span class="lang-fr">Fonctions variadiques</span></p>
+                <p class="project-description lang-en">Recreation of printf function supporting multiple format specifiers and flags.</p>
+                <p class="project-description lang-fr">Recréation de la fonction printf supportant plusieurs spécificateurs de format et drapeaux.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>libft</h3>
+                <p class="project-tech">C, <span class="lang-en">Standard Library</span><span class="lang-fr">Bibliothèque standard</span></p>
+                <p class="project-description lang-en">Custom C library implementing standard functions (string manipulation, memory, linked lists). Foundation for all 42 projects.</p>
+                <p class="project-description lang-fr">Bibliothèque C personnalisée implémentant fonctions standard (manipulation chaînes, mémoire, listes chaînées). Base pour tous les projets 42.</p>
+            </div>
+
+            <div class="project-card" data-category="42">
+                <h3>NetPractice</h3>
+                <p class="project-tech"><span class="lang-en">Networking, TCP/IP, Subnetting</span><span class="lang-fr">Réseaux, TCP/IP, Sous-réseaux</span></p>
+                <p class="project-description lang-en">Network configuration exercises covering IP addressing, subnetting, routing, and network troubleshooting.</p>
+                <p class="project-description lang-fr">Exercices de configuration réseau couvrant adressage IP, sous-réseaux, routage et dépannage réseau.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="lang-en">Experience & Education</h2>
+        <h2 class="lang-fr">Expérience & Formation</h2>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="experience-title">
+                    <h3 class="lang-en">Junior Software Engineer</h3>
+                    <h3 class="lang-fr">Ingénieur Développeur Junior</h3>
+                    <p class="experience-company">eTech Consulting - <a href="https://www.arkeup.com" target="_blank" style="color: var(--accent); text-decoration: none;">Arkeup Group</a></p>
+                </div>
+                <p class="experience-date lang-en">November 2023 - December 2024</p>
+                <p class="experience-date lang-fr">Novembre 2023 - Décembre 2024</p>
+            </div>
+            <p class="experience-description lang-en">Developed backend systems for VTC fleet management and smart agriculture platforms using Java/Spring Boot and Python/FastAPI. Worked with microservices architecture, implemented RESTful APIs, and integrated third-party services. Collaborated in Agile teams and participated in code reviews.</p>
+            <p class="experience-description lang-fr">Développement de systèmes backend pour gestion de flotte VTC et plateformes d'agriculture intelligente utilisant Java/Spring Boot et Python/FastAPI. Travail avec architecture microservices, implémentation d'APIs REST et intégration de services tiers. Collaboration en équipes Agile et participation aux revues de code.</p>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="experience-title">
+                    <h3 class="lang-en">Cadet (Student)</h3>
+                    <h3 class="lang-fr">Cadet (Étudiant)</h3>
+                    <p class="experience-company">Common Core (Milestone 5/6) - <a href="https://42antananarivo.mg" target="_blank" style="color: var(--accent); text-decoration: none;">42 Antananarivo</a></p>
+                </div>
+                <p class="experience-date lang-en">2024 - Present</p>
+                <p class="experience-date lang-fr">2024 - Présent</p>
+            </div>
+            <p class="experience-description lang-en">Project-based learning in C/C++ system programming, algorithms, and computer science fundamentals. Completed 19 projects covering network programming, graphics, concurrency, and software architecture.</p>
+            <p class="experience-description lang-fr">Apprentissage par projets en programmation système C/C++, algorithmique et fondamentaux de l'informatique. Réalisation de 19 projets couvrant programmation réseau, graphisme, concurrence et architecture logicielle.</p>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="experience-title">
+                    <h3 class="lang-en">Bachelor's Degree in Computer Science</h3>
+                    <h3 class="lang-fr">Licence en Informatique</h3>
+                    <p class="experience-company"><a href="https://www.ituniversity-mg.com" target="_blank" style="color: var(--accent); text-decoration: none;">IT University Madagascar</a></p>
+                </div>
+                <p class="experience-date">2020 - 2024</p>
+            </div>
+            <p class="experience-description lang-en">Specialized in software development with focus on programming, databases, and web technologies. <a href="https://www.ituniversity-mg.com/page/check.php?id=2GamgxRoX3D" target="_blank" style="color: var(--accent);">Verify diploma</a></p>
+            <p class="experience-description lang-fr">Spécialisation en développement logiciel avec focus sur programmation, bases de données et technologies web. <a href="https://www.ituniversity-mg.com/page/check.php?id=2GamgxRoX3D" target="_blank" style="color: var(--accent);">Vérifier le diplôme</a></p>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="experience-title">
+                    <h3 class="lang-en">Rotaractor (Active Member & Officer)</h3>
+                    <h3 class="lang-fr">Rotaractien (Membre Actif & Responsable)</h3>
+                    <p class="experience-company"><a href="https://www.rotary.org/en/get-involved/rotaract-clubs" target="_blank" style="color: var(--accent); text-decoration: none;">Rotaract Club Iarivo</a> - <a href="https://www.rotary.org" target="_blank" style="color: var(--accent); text-decoration: none;">Rotary International</a> D9220</p>
+                </div>
+                <p class="experience-date lang-en">Ongoing</p>
+                <p class="experience-date lang-fr">En cours</p>
+            </div>
+            <p class="experience-description lang-en">Project management, team leadership, and community service initiatives. Rotary Youth Leadership Awards (RYLA) certified.</p>
+            <p class="experience-description lang-fr">Gestion de projets, leadership d'équipe et initiatives de service communautaire. Certifié Rotary Youth Leadership Awards (RYLA).</p>
+        </div>
+    </section>
+
+    <section id="certifications" style="background: var(--bg-secondary);">
+        <h2 class="lang-en">Certifications & Training</h2>
+        <h2 class="lang-fr">Certifications & Formations</h2>
+        <div style="max-width: 900px; margin: 0 auto;">
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;" class="lang-en">
+                Professional certifications from leading organizations. 
+                <a href="https://www.credly.com/users/yasser-andriamiarisoa/badges" target="_blank" style="color: var(--accent); font-weight: 500;">View verified badges on Credly →</a>
+            </p>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;" class="lang-fr">
+                Certifications professionnelles d'organisations reconnues. 
+                <a href="https://www.credly.com/users/yasser-andriamiarisoa/badges" target="_blank" style="color: var(--accent); font-weight: 500;">Voir les badges vérifiés sur Credly →</a>
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <div style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Data Science & IA</h4>
+                    <ul style="list-style: none; color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>• Applied Data Science Lab (<a href="https://www.worldquantuniversity.com" target="_blank" style="color: var(--accent); text-decoration: none;">WorldQuant University</a>, 2025)</li>
+                        <li>• AI Fundamentals (<a href="https://www.ibm.com" target="_blank" style="color: var(--accent); text-decoration: none;">IBM</a> & <a href="https://www.cisco.com" target="_blank" style="color: var(--accent); text-decoration: none;">Cisco</a>, 2024)</li>
+                        <li>• Introduction to Data Science (<a href="https://www.cisco.com" target="_blank" style="color: var(--accent); text-decoration: none;">Cisco</a>, 2024)</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;" class="lang-en">Programming & Development</h4>
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;" class="lang-fr">Programmation & Développement</h4>
+                    <ul style="list-style: none; color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>• Python Essentials 1 (<a href="https://www.cisco.com" target="_blank" style="color: var(--accent); text-decoration: none;">Cisco</a>, 2024)</li>
+                        <li>• Java (Basic) (<a href="https://www.hackerrank.com" target="_blank" style="color: var(--accent); text-decoration: none;">HackerRank</a>, 2024)</li>
+                        <li>• Python (Basic) (<a href="https://www.hackerrank.com" target="_blank" style="color: var(--accent); text-decoration: none;">HackerRank</a>, 2024)</li>
+                        <li>• SQL (Basic) (<a href="https://www.hackerrank.com" target="_blank" style="color: var(--accent); text-decoration: none;">HackerRank</a>, 2024)</li>
+                        <li>• Software Engineer Intern (<a href="https://www.hackerrank.com" target="_blank" style="color: var(--accent); text-decoration: none;">HackerRank</a>, 2024)</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Leadership & Soft Skills</h4>
+                    <ul style="list-style: none; color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>• Rotary Youth Leadership Awards (<a href="https://www.rotary.org" target="_blank" style="color: var(--accent); text-decoration: none;">Rotary</a>, 2025)</li>
+                        <li>• Gestion de Projet JCI (<a href="https://jci.cc" target="_blank" style="color: var(--accent); text-decoration: none;">JCI Madagascar</a>, 2025)</li>
+                        <li>• Agile Explorer (<a href="https://www.ibm.com" target="_blank" style="color: var(--accent); text-decoration: none;">IBM</a>, 2024)</li>
+                        <li>• Problem Solving (Intermediate) (<a href="https://www.hackerrank.com" target="_blank" style="color: var(--accent); text-decoration: none;">HackerRank</a>, 2024)</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;" class="lang-en">Languages & Other</h4>
+                    <h4 style="color: var(--accent); margin-bottom: 0.5rem;" class="lang-fr">Langues & Autres</h4>
+                    <ul style="list-style: none; color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>• Advanced English Certificate (ETP, 2020)</li>
+                        <li>• English for STEM (U.S. Dept of State, 2024)</li>
+                        <li>• Éducation Financière (<a href="https://axian-university.framer.ai/" target="_blank" style="color: var(--accent); text-decoration: none;">Axian University</a>, 2026)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="lang-en">Get In Touch</h2>
+        <h2 class="lang-fr">Me Contacter</h2>
+        <div class="contact-links">
+            <a href="mailto:andriamiarisoa.yasser@gmail.com" class="contact-link">
+                📧 andriamiarisoa.yasser@gmail.com
+            </a>
+            <a href="https://linkedin.com/in/yasser-andriamiarisoa-a7a475238" class="contact-link" target="_blank">
+                💼 LinkedIn
+            </a>
+            <a href="https://github.com/Andriamiarisoa" class="contact-link" target="_blank">
+                💻 GitHub
+            </a>
+            <a href="https://www.credly.com/users/yasser-andriamiarisoa/badges" class="contact-link" target="_blank">
+                🏆 Credly
+            </a>
+            <a href="tel:+261386431348" class="contact-link">
+                📱 +261 38 64 313 48
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p class="lang-en">&copy; 2026 Yasser Andriamiarisoa. Built with HTML, CSS & JavaScript.</p>
+        <p class="lang-fr">&copy; 2026 Yasser Andriamiarisoa. Créé avec HTML, CSS & JavaScript.</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function toggleLang() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('data-lang') || 'en';
+            const newLang = currentLang === 'en' ? 'fr' : 'en';
+            html.setAttribute('data-lang', newLang);
+            localStorage.setItem('lang', newLang);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedLang = localStorage.getItem('lang') || 'en';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-lang', savedLang);
+
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
